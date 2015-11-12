@@ -22,7 +22,7 @@ function rxHandler(rxSocket) {
 	 *                 that match a given resource. For example, the resource 'questions'
 	 *                 can only take a 'questions' parameter. Anything else will error.
 	 *                 Nested resources need to have each resource represented with a
-	 *                 parameter except for the last resource, which it is optional.
+	 *                 parameter except for the last resource, which is optional.
 	 * @param {object} options An options object which may contain an array of
 	 *                 available query parameters. Any query parameter passed that
 	 *                 is not included will throw an error.
