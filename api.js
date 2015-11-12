@@ -31,7 +31,7 @@ function rxHandler(rxSocket) {
 	 *                 must be destructured to get both the request and response.
 	 */
 	rxSocket.get('questions', {query: ['name']})
-		.subscribe(({req, res}) => {
+		.subscribe(({req, res, next}) => {
 			/** Req API **/
 			req.headers
 			req.resource
@@ -53,11 +53,11 @@ function rxHandler(rxSocket) {
 		})
 
 	/** RestFul Listeners **/
-	rxSocket.put('questions').subscribe(({req, res}) => {});
-	rxSocket.post('questions').subscribe(({req, res}) => {});
-	rxSocket.patch('questions').subscribe(({req, res}) => {});
-	rxSocket.delete('questions').subscribe(({req, res}) => {});
-	rxSocket.head('questions').subscribe(({req, res}) => {});
+	rxSocket.put('questions').subscribe(({req, res, next}) => {});
+	rxSocket.post('questions').subscribe(({req, res, next}) => {});
+	rxSocket.patch('questions').subscribe(({req, res, next}) => {});
+	rxSocket.delete('questions').subscribe(({req, res, next}) => {});
+	rxSocket.head('questions').subscribe(({req, res, next}) => {});
 
 	/**
 	 * Server sent messages - possible other verbs? send, emit, write
