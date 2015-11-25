@@ -15,6 +15,20 @@ function rxHandler(rxSocket) {
 		});
 
 	/**
+	 * Error middleware handler
+	 *
+	 * @param {object} options An options object. Unused at the moment.
+	 * @return {Observable} Observable is passed an object with an error object, the
+	 *                 request, response, and next method. Calling next will route
+	 *                 to the next error handling middleware.
+	 */
+	rxSocket.useError(options)
+		.subscribe(({err, req, res, next}) => {
+			console.error(err.stack);
+			res.status(500).send('Something broke!');
+		});
+
+	/**
 	 * RESTful methods are available on rxSocket
 	 *
 	 * @param {string} Resource a dot separated path to the resource being requested.

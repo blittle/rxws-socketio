@@ -1,16 +1,18 @@
 import { Observable } from 'rx';
 
+import getDefaultErrorHandler from './default-error-handler';
 import { handleRequest, makeRequest } from './lib/Request';
 import { Response } from './lib/Response';
-
-const MESSAGE_TYPE = '__rxwsData';
-
-function sendError(socket, header, errorCode) {
-}
+import { MESSAGE_TYPE } from './lib/constants';
 
 export default function(ioSocket) {
 
 	let handlers = [];
+	let errorHandlers = [];
+
+	getDefaultErrorHandler((errorHandler) => {
+		errorHandlers = [ ...errorHandlers, errorHandler ];
+	});
 
 	function addRouteHandler(method, resource, options) {
 		return Observable.create((observer) => {
@@ -21,7 +23,15 @@ export default function(ioSocket) {
 		});
 	}
 
-	function addMiddleWare(options, observer) {
+	function addErrorMiddleWare(options) {
+		return Observable.create((observer) => {
+			errorHandlers.unshift({
+				options, observer
+			});
+		});
+	}
+
+	function addMiddleWare(options) {
 		return Observable.create((observer) => {
 			handlers.push({
 				name: 'use',
@@ -52,6 +62,7 @@ export default function(ioSocket) {
 		patch: addRouteHandler.bind(null, 'patch'),
 		head: addRouteHandler.bind(null, 'head'),
 
-		use: addMiddleWare
+		use: addMiddleWare,
+		useError: addErrorMiddleWare
 	}
 }
