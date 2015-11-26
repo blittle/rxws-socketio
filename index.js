@@ -45,7 +45,7 @@ export default function(ioSocket) {
 			let request = makeRequest(data);
 			let response = new Response(request, socket);
 
-			handleRequest(0, handlers, socket, request, response);
+			handleRequest(0, handlers, errorHandlers, request, response);
 		});
     //
 		// socket.on('disconnect', () => {
