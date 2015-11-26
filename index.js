@@ -1,6 +1,6 @@
 import { Observable } from 'rx';
 
-import getDefaultErrorHandler from './default-error-handler';
+import getDefaultErrorHandler from './lib/default-error-handler';
 import { handleRequest, makeRequest } from './lib/Request';
 import { Response } from './lib/Response';
 import { MESSAGE_TYPE } from './lib/constants';
@@ -47,11 +47,9 @@ export default function(ioSocket) {
 
 			handleRequest(0, handlers, socket, request, response);
 		});
-
-		socket.on('disconnect', () => {
-			console.log('DISCONNECTED');
-			console.log(arguments);
-		});
+    //
+		// socket.on('disconnect', () => {
+		// });
 	});
 
 	return {
