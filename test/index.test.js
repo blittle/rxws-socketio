@@ -204,12 +204,43 @@ describe('RXWS', () => {
 
 			rxSocket.get('questions')
 				.subscribe(({req, res, next}) => {
-					expect('').to.be('Should not reach this handler');
+					throw new Error('Should not reach this handler');
 				});
 
 			rxSocket.useError()
 				.subscribe(({err, req, res, next}) => {
 					expect(err).to.be('This is an error');
+					done();
+				});
+
+			sendMockRequest({
+				"header": {
+					"resource": "get.questions",
+					"parameters": {"questions": 333},
+					"apiVersion": "1.2.1", //major, minor, patch
+					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
+				},
+				"body": null
+			});
+		});
+
+		it('should route through multiple error handlers', (done) => {
+			let rxSocket = rxws(socket);
+
+			rxSocket.get('questions')
+				.subscribe(({req, res, next}) => {
+					next('This is an error');
+				});
+
+			rxSocket.useError()
+				.subscribe(({err, req, res, next}) => {
+					expect(err).to.be('This is an error');
+					next('new error');
+				});
+
+			rxSocket.useError()
+				.subscribe(({err, req, res, next}) => {
+					expect(err).to.be('new error');
 					done();
 				});
 
@@ -244,6 +275,35 @@ describe('RXWS', () => {
 						sentMessages = [];
 						done();
 					});
+				});
+
+			sendMockRequest({
+				"header": {
+					"resource": "get.questions",
+					"parameters": {"questions": 333},
+					"apiVersion": "1.2.1", //major, minor, patch
+					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
+				},
+				"body": null
+			});
+		});
+
+		it('should skip handlers that do not correspond to resource', (done) => {
+			let rxSocket = rxws(socket);
+
+			rxSocket.get('things')
+				.subscribe(({req, res, next}) => {
+					throw(new Error("Should not execute this handler"));
+				});
+
+			rxSocket.get('stuffs')
+				.subscribe(({req, res, next}) => {
+					throw(new Error("Should not execute this handler"));
+				});
+
+			rxSocket.get('questions')
+				.subscribe(({req, res, next}) => {
+					done();
 				});
 
 			sendMockRequest({

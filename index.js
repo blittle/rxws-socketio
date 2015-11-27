@@ -25,9 +25,13 @@ export default function(ioSocket) {
 
 	function addErrorMiddleWare(options) {
 		return Observable.create((observer) => {
-			errorHandlers.unshift({
+			let defaultHandler = errorHandlers.pop();
+
+			errorHandlers.push({
 				options, observer
 			});
+
+			errorHandlers.push(defaultHandler);
 		});
 	}
 
