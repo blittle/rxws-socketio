@@ -5,18 +5,14 @@ let callback;
 let sentMessages = [];
 
 let socket = {
-	on(type, cb) {
-		if (type === 'connection') {
-			cb({
-				on: (type, _callback) => {
-					callback = _callback;
-				},
-
-				emit(type, data) {
-					sentMessages.push({ type, data });
-				}
-			})
+	on: (type, _callback) => {
+		if (type !== 'error') {
+			callback = _callback;
 		}
+	},
+
+	emit(type, data) {
+		sentMessages.push({ type, data: JSON.parse(data) });
 	}
 };
 
@@ -35,7 +31,7 @@ describe('RXWS', () => {
 					done();
 				})
 
-				sendMockRequest({
+				sendMockRequest(JSON.stringify({
 					"header": {
 						"resource": "get.questions",
 						"parameters": {"questions": 333},
@@ -43,7 +39,7 @@ describe('RXWS', () => {
 						"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 					},
 					"body": null
-				});
+				}));
 		});
 
 		it('should route post requests', (done) => {
@@ -54,7 +50,7 @@ describe('RXWS', () => {
 					done();
 				})
 
-				sendMockRequest({
+				sendMockRequest(JSON.stringify({
 					"header": {
 						"resource": "post.questions",
 						"parameters": {"questions": 333},
@@ -62,7 +58,7 @@ describe('RXWS', () => {
 						"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 					},
 					"body": null
-				});
+				}));
 		});
 
 		it('should route put requests', (done) => {
@@ -73,7 +69,7 @@ describe('RXWS', () => {
 					done();
 				})
 
-				sendMockRequest({
+				sendMockRequest(JSON.stringify({
 					"header": {
 						"resource": "put.questions",
 						"parameters": {"questions": 333},
@@ -81,7 +77,7 @@ describe('RXWS', () => {
 						"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 					},
 					"body": null
-				});
+				}));
 		});
 
 		it('should route delete requests', (done) => {
@@ -92,7 +88,7 @@ describe('RXWS', () => {
 					done();
 				})
 
-				sendMockRequest({
+				sendMockRequest(JSON.stringify({
 					"header": {
 						"resource": "delete.questions",
 						"parameters": {"questions": 333},
@@ -100,7 +96,7 @@ describe('RXWS', () => {
 						"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 					},
 					"body": null
-				});
+				}));
 		});
 
 		it('should route patch requests', (done) => {
@@ -111,7 +107,7 @@ describe('RXWS', () => {
 					done();
 				})
 
-				sendMockRequest({
+				sendMockRequest(JSON.stringify({
 					"header": {
 						"resource": "patch.questions",
 						"parameters": {"questions": 333},
@@ -119,7 +115,7 @@ describe('RXWS', () => {
 						"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 					},
 					"body": null
-				});
+				}));
 		});
 
 		it('should route head requests', (done) => {
@@ -130,7 +126,7 @@ describe('RXWS', () => {
 					done();
 				})
 
-				sendMockRequest({
+				sendMockRequest(JSON.stringify({
 					"header": {
 						"resource": "head.questions",
 						"parameters": {"questions": 333},
@@ -138,7 +134,7 @@ describe('RXWS', () => {
 						"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 					},
 					"body": null
-				});
+				}));
 		});
 	});
 
@@ -150,7 +146,7 @@ describe('RXWS', () => {
 		it('should send error with default error handler', (done) => {
 			let rxSocket = rxws(socket);
 
-			sendMockRequest({
+			sendMockRequest(JSON.stringify({
 				"header": {
 					"resource": "head.questions",
 					"parameters": {"questions": 333},
@@ -158,7 +154,7 @@ describe('RXWS', () => {
 					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 				},
 				"body": null
-			});
+			}));
 
 			setTimeout(() => {
 				expect(sentMessages.length).to.be(1);
@@ -183,7 +179,7 @@ describe('RXWS', () => {
 					done();
 				});
 
-			sendMockRequest({
+			sendMockRequest(JSON.stringify({
 				"header": {
 					"resource": "get.questions",
 					"parameters": {"questions": 333},
@@ -191,7 +187,7 @@ describe('RXWS', () => {
 					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 				},
 				"body": null
-			});
+			}));
 		});
 
 		it('should skip non error handlers once an error is thrown', (done) => {
@@ -213,7 +209,7 @@ describe('RXWS', () => {
 					done();
 				});
 
-			sendMockRequest({
+			sendMockRequest(JSON.stringify({
 				"header": {
 					"resource": "get.questions",
 					"parameters": {"questions": 333},
@@ -221,7 +217,7 @@ describe('RXWS', () => {
 					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 				},
 				"body": null
-			});
+			}));
 		});
 
 		it('should route through multiple error handlers', (done) => {
@@ -244,7 +240,7 @@ describe('RXWS', () => {
 					done();
 				});
 
-			sendMockRequest({
+			sendMockRequest(JSON.stringify({
 				"header": {
 					"resource": "get.questions",
 					"parameters": {"questions": 333},
@@ -252,7 +248,7 @@ describe('RXWS', () => {
 					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 				},
 				"body": null
-			});
+			}));
 		});
 	});
 
@@ -277,7 +273,7 @@ describe('RXWS', () => {
 					});
 				});
 
-			sendMockRequest({
+			sendMockRequest(JSON.stringify({
 				"header": {
 					"resource": "get.questions",
 					"parameters": {"questions": 333},
@@ -285,7 +281,7 @@ describe('RXWS', () => {
 					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 				},
 				"body": null
-			});
+			}));
 		});
 
 		it('should skip handlers that do not correspond to resource', (done) => {
@@ -306,7 +302,7 @@ describe('RXWS', () => {
 					done();
 				});
 
-			sendMockRequest({
+			sendMockRequest(JSON.stringify({
 				"header": {
 					"resource": "get.questions",
 					"parameters": {"questions": 333},
@@ -314,7 +310,7 @@ describe('RXWS', () => {
 					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 				},
 				"body": null
-			});
+			}));
 		});
 
 		it('should route to multiple matching handlers', (done) => {
@@ -340,7 +336,7 @@ describe('RXWS', () => {
 					});
 				});
 
-			sendMockRequest({
+			sendMockRequest(JSON.stringify({
 				"header": {
 					"resource": "get.questions",
 					"parameters": {"questions": 333},
@@ -348,7 +344,7 @@ describe('RXWS', () => {
 					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 				},
 				"body": null
-			});
+			}));
 		});
 
 		it('should pass modified request to multiple handlers', (done) => {
@@ -366,7 +362,7 @@ describe('RXWS', () => {
 					done();
 				});
 
-			sendMockRequest({
+			sendMockRequest(JSON.stringify({
 				"header": {
 					"resource": "get.questions",
 					"parameters": {"questions": 333},
@@ -374,7 +370,7 @@ describe('RXWS', () => {
 					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 				},
 				"body": null
-			});
+			}));
 		});
 
 		it('should route through generic middleware in the correct order', (done) => {
@@ -415,7 +411,7 @@ describe('RXWS', () => {
 					done();
 				});
 
-			sendMockRequest({
+			sendMockRequest(JSON.stringify({
 				"header": {
 					"resource": "get.questions",
 					"parameters": {"questions": 333},
@@ -423,7 +419,7 @@ describe('RXWS', () => {
 					"correlationId": "FUFJ-XHJHF-FFFF-RRRR"
 				},
 				"body": null
-			});
+			}));
 		});
 	})
 });

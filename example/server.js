@@ -1,5 +1,5 @@
-var io = require('socket.io')();
-var rxws = require('../index');
+var io = require('socket.io')(3000);
+var rxws = require('../lib/index').default;
 
 function rxHandler(rxSocket) {
 	rxSocket.get('questions')
@@ -7,6 +7,7 @@ function rxHandler(rxSocket) {
 			var req = options.req;
 			var res = options.res;
 			var next = options.next;
+			console.log('message');
 
 			res.send([
 				{
@@ -19,7 +20,8 @@ function rxHandler(rxSocket) {
 }
 
 io.on('connection', function(socket) {
+	console.log('connection');
 	rxHandler(rxws(socket));
 });
 
-io.listen(3000);
+// io.listen(3000);

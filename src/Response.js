@@ -36,11 +36,11 @@ export class Response {
 		this.headers.statusCode = this.statusCode;
 		let resources = this.headers.resource.split('.');
 
-		return {
+		return JSON.stringify({
 			body: {
 				[resources[resources.length - 1]]: data || this.body
 			},
 			header: this.headers
-		}
+		})
 	}
 }

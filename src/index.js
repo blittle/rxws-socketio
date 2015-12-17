@@ -5,7 +5,7 @@ import { handleRequest, makeRequest } from './Request';
 import { Response } from './Response';
 import { MESSAGE_TYPE } from './constants';
 
-export default function(ioSocket) {
+export default function(socket) {
 
 	let handlers = [];
 	let errorHandlers = [];
@@ -44,16 +44,15 @@ export default function(ioSocket) {
 		});
 	}
 
-	ioSocket.on('connection', (socket) => {
-		socket.on(MESSAGE_TYPE, (data) => {
-			let request = makeRequest(data);
-			let response = new Response(request, socket);
+	socket.on(MESSAGE_TYPE, (data) => {
+		let request = makeRequest(JSON.parse(data));
+		let response = new Response(request, socket);
 
-			handleRequest(0, handlers, errorHandlers, request, response);
-		});
-    //
-		// socket.on('disconnect', () => {
-		// });
+		handleRequest(0, handlers, errorHandlers, request, response);
+	});
+
+	socket.on('error', (error) => {
+		console.error(error);
 	});
 
 	return {

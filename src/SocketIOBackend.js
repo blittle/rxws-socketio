@@ -1,4 +1,4 @@
-import io from 'socket.io';
+import io from 'socket.io-client';
 import { Observable } from 'rx';
 
 const MESSAGE_TYPE = '__rxwsData';
@@ -7,11 +7,19 @@ let socket;
 
 export default {
 	connect(url) {
-		socket = io(url);
 		return Observable.create((observer) => {
-			socket.on('connect', observer.onNext);
-			socket.on('disconnect', observer.onError.bind(null, 'Lost connection'));
-			socket.on('error', observer.onError.bind(null, 'Error'));
+			socket = io(url);
+			socket.on('connect', function() {
+				observer.onNext()
+			});
+
+			socket.on('disconnect', function() {
+				observer.onError('Lost connection');
+			});
+
+			socket.on('error', function() {
+				observer.onError('Error');
+			});
 		});
 	},
 

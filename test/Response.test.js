@@ -42,6 +42,7 @@ describe('Response', () => {
 	it('should send a message with correct packet structure', (done) => {
 		let res = new Response({headers: {correlationId: 5, resource: 'get.books.pages'}}, {
 			emit(type, data) {
+				data = JSON.parse(data);
 				expect(type).to.be(MESSAGE_TYPE);
 				expect(data.body.pages.someData).to.be(1);
 				done();
