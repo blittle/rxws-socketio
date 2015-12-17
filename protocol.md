@@ -71,7 +71,7 @@
 ```json
 {
   "header": {
-   "apiVersion": "1.2.1", 
+   "apiVersion": "1.2.1",
    "correlationId": "FUFJ-XHJHF-FFFF-RRRR",
    "statusCode": 503
   },
@@ -97,5 +97,3 @@ Business validation error: 430
 Server error: 503
 
 ```
-
-
