@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import { handleRequest, makeRequest } from '../lib/Request';
+import { handleRequest, makeRequest } from '../src/Request';
 
 describe('Request', () => {
 	describe('makeRequest', () => {

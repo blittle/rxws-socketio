@@ -1,7 +1,7 @@
 import expect from 'expect.js';
 
-import { MESSAGE_TYPE } from '../lib/constants';
-import { Response } from '../lib/Response';
+import { MESSAGE_TYPE } from '../src/constants';
+import { Response } from '../src/Response';
 
 describe('Response', () => {
 	it('should create a response', () => {

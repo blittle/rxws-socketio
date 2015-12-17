@@ -1,9 +1,9 @@
 import { Observable } from 'rx';
 
-import getDefaultErrorHandler from './lib/default-error-handler';
-import { handleRequest, makeRequest } from './lib/Request';
-import { Response } from './lib/Response';
-import { MESSAGE_TYPE } from './lib/constants';
+import getDefaultErrorHandler from './default-error-handler';
+import { handleRequest, makeRequest } from './Request';
+import { Response } from './Response';
+import { MESSAGE_TYPE } from './constants';
 
 export default function(ioSocket) {
 

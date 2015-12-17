@@ -1,4 +1,4 @@
-import rxws from '../index';
+import rxws from '../src/index';
 import expect from 'expect.js';
 
 let callback;
