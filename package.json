@@ -1,6 +1,6 @@
 {
   "name": "rxws-socketio",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A RESTful reactive websocket implementation on top of socket.io",
   "main": "lib/index.js",
   "scripts": {
